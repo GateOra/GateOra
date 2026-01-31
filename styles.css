@@ -471,5 +471,23 @@ body::before{
     justify-self: stretch;        /* full-width button op mobiel */
   }
 }
+/* Select look (input zelf) */
+#early-access select.early-input{
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.65) 50%),
+    linear-gradient(135deg, rgba(255,255,255,0.65) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(50% + 1px),
+    calc(100% - 14px) calc(50% + 1px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 42px !important;
+}
+
+/* Opties: browser beperkt dit, maar helpt soms iets */
+#early-access select.early-input option{
+  color: #111;
+}
+
 
 
