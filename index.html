@@ -104,17 +104,17 @@
       </div>
 
       <div>
-        <label class="early-label" for="ea_chain">Primary chain</label>
-        <select class="early-input" id="ea_chain" name="primary_chain" required>
-          <option value="" selected disabled>Select…</option>
-          <option>Ethereum</option>
-          <option>Arbitrum</option>
-          <option>Optimism</option>
-          <option>Base</option>
-          <option>Polygon</option>
-          <option>Solana</option>
-          <option>Other</option>
-        </select>
+        <input class="early-input" id="ea_chain" name="primary_chain" list="chainList" placeholder="Select…" required />
+<datalist id="chainList">
+  <option value="Ethereum"></option>
+  <option value="Arbitrum"></option>
+  <option value="Optimism"></option>
+  <option value="Base"></option>
+  <option value="Polygon"></option>
+  <option value="Solana"></option>
+  <option value="Other"></option>
+</datalist>
+
       </div>
     </div>
 
@@ -226,6 +226,7 @@
   </script>
 </body>
 </html>
+
 
 
 
