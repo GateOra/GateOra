@@ -480,4 +480,53 @@ audio{ width: min(520px, 100%); }
 @media (prefers-reduced-motion: reduce){
   .logo-track{ animation: none; }
 }
+/* Marquee container */
+.logo-marquee{
+  overflow: hidden;
+  position: relative;
+  margin-top: 10px;
+
+  /* optioneel: fade aan de zijkanten (premium) */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+/* Track die beweegt */
+.logo-track{
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  animation: logoScroll 18s linear infinite;
+  will-change: transform;
+}
+
+/* BELANGRIJK: pill styling ook op logo-track spans */
+.logo-track span{
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.75);
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+@keyframes logoScroll{
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Pause bij hover */
+.logo-marquee:hover .logo-track{
+  animation-play-state: paused;
+}
+
+/* Respecteer reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .logo-track{ animation: none; }
+}
+
 
