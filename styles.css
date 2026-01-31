@@ -453,3 +453,31 @@ audio{ width: min(520px, 100%); }
     width: 100%;
   }
 }
+.logo-marquee{
+  overflow: hidden;
+  position: relative;
+  margin-top: 10px;
+}
+
+.logo-track{
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  animation: logoScroll 18s linear infinite;
+}
+
+@keyframes logoScroll{
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Pause on hover (desktop) */
+.logo-marquee:hover .logo-track{
+  animation-play-state: paused;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .logo-track{ animation: none; }
+}
+
