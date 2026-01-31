@@ -64,39 +64,76 @@
    
   </div>
 </section>
-
-    <section class="section" id="features">
-      <h2 class="section-title">What GateOra protects</h2>
-      <p class="section-subtitle">A clean security layer for the Web3 user journey.</p>
-
-      <div class="grid">
-        <div class="card">
-          <h3>🛰️ Threat Detection</h3>
-          <p>Real-time signals to spot phishing, malicious approvals, and abnormal activity before damage happens.</p>
-        </div>
-
-        <div class="card">
-          <h3>🛡️ Wallet Firewall</h3>
-          <p>Policy controls to block risky transactions and warn users in the exact moment that matters.</p>
-        </div>
-
-        <div class="card">
-          <h3>📡 Contract Monitoring</h3>
-          <p>Scan exposure, patterns, and common exploit vectors to reduce smart contract risk.</p>
-        </div>
-      </div>
-    </section>
-<section class="section" id="features">
-  ...
-</section>
-
-<!-- HIER PLAK JE HET EARLY ACCESS FORMULIER -->
 <section class="section" id="early-access">
-  ...
-</section>
+  <h2 class="section-title">Get Early Access</h2>
+  <p class="section-subtitle">
+    Join the private beta. Tell us who you are, and what you want GateOra to protect.
+  </p>
 
-<section class="section" id="feedback">
-  ...
+  <form
+    class="early-form"
+    action="https://formsubmit.co/JOUW_EMAIL_HIER"
+    method="POST"
+  >
+    <input type="text" name="_honey" style="display:none" />
+    <input type="hidden" name="_captcha" value="false" />
+    <input type="hidden" name="_subject" value="GateOra • Early Access Request" />
+    <input type="hidden" name="_template" value="table" />
+    <input type="hidden" name="_next" value="https://gateora.github.io/GateOra/thanks-early.html" />
+
+    <div class="early-grid">
+      <div>
+        <label class="early-label" for="ea_name">Name</label>
+        <input class="early-input" id="ea_name" name="name" type="text" placeholder="Your name" required />
+      </div>
+
+      <div>
+        <label class="early-label" for="ea_email">Email</label>
+        <input class="early-input" id="ea_email" name="email" type="email" placeholder="you@email.com" required />
+      </div>
+
+      <div>
+        <label class="early-label" for="ea_role">Role</label>
+        <select class="early-input" id="ea_role" name="role" required>
+          <option value="" selected disabled>Select…</option>
+          <option value="User">User</option>
+          <option value="Builder">Builder</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="early-label" for="ea_chain">Primary chain</label>
+        <select class="early-input" id="ea_chain" name="primary_chain" required>
+          <option value="" selected disabled>Select…</option>
+          <option>Ethereum</option>
+          <option>Arbitrum</option>
+          <option>Optimism</option>
+          <option>Base</option>
+          <option>Polygon</option>
+          <option>Solana</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <label class="early-label" for="ea_need">Top need</label>
+    <select class="early-input" id="ea_need" name="top_need" required>
+      <option value="" selected disabled>Select…</option>
+      <option>Phishing / fake dApps</option>
+      <option>Unlimited approvals</option>
+      <option>Malicious signatures (drainers)</option>
+      <option>Unknown contracts</option>
+      <option>High-risk transactions</option>
+      <option>Other</option>
+    </select>
+
+    <label class="early-label" for="ea_msg">Extra details (optional)</label>
+    <textarea class="early-textarea" id="ea_msg" name="message"
+      placeholder="Any context, links, wallet/dApp type, or requirements…"></textarea>
+
+    <button type="submit" class="btn btn-primary">Request Early Access</button>
+    <p class="micro muted" style="margin: 10px 0 0;">We’ll reply if we can onboard you to the beta.</p>
+  </form>
 </section>
 
 <form
@@ -187,5 +224,6 @@
   </script>
 </body>
 </html>
+
 
 
