@@ -488,6 +488,22 @@ body::before{
 #early-access select.early-input option{
   color: #111;
 }
+/* Early Access button polish */
+#early-access .btn.btn-primary{
+  padding: 14px 18px;
+  border-radius: 16px;
+  min-width: 240px;
+}
+
+#early-access .btn.btn-primary:hover{
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+#early-access .btn.btn-primary:active{
+  transform: translateY(0px);
+}
+
 
 
 
