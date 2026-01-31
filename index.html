@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GateOra</title>
 
-  <!-- Browser leest CSS, niet SCSS -->
-  <link rel="stylesheet" href="./styles.css?v=7" />
-
+  <!-- Cache buster: verhoog v=9, v=10 als je CSS updates niet ziet -->
+  <link rel="stylesheet" href="./styles.css?v=8" />
 </head>
 
 <body>
@@ -24,16 +23,19 @@
 
       <nav class="nav">
         <a href="#features">Features</a>
+        <a href="#early-access">Early Access</a>
         <a href="#feedback">Feedback</a>
-        <a href="#about">About</a>
       </nav>
 
       <a class="btn btn-primary" href="#early-access">Get Early Access</a>
     </header>
 
+    <!-- HERO -->
     <section class="hero" id="about">
       <div class="hero-panel">
         <div class="pill">Private Beta • Web3 Firewall</div>
+
+        <h1 class="title">AI Security for Web3</h1>
         <p class="subtitle">
           GateOra helps protect wallets, dApps, and smart contracts with an AI-driven firewall—designed for fast, safe adoption.
         </p>
@@ -41,128 +43,177 @@
         <div class="cta-row">
           <a class="btn btn-primary" href="#features">Explore Features</a>
           <a class="btn btn-ghost" href="./demo.html">Live Demo</a>
-
         </div>
 
         <div class="audio-wrap">
           <p class="micro">Listen to the 10s intro</p>
           <audio controls preload="metadata">
-            <source src="ttsMP3.com_VoiceText_2026-1-31_15-51-3.mp3" type="audio/mpeg" />
+            <!-- TIP: hernoem mp3 naar gateora-intro.mp3 voor nette URL -->
+            <source src="./ttsMP3.com_VoiceText_2026-1-31_15-51-3.mp3" type="audio/mpeg" />
           </audio>
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="hero-wrap">
-          <!-- Zet jouw hero image in dezelfde map of pas naam aan -->
           <img src="ChatGPT Image 31 jan 2026, 16_42_13.png" alt="GateOra hero visual" />
         </div>
       </div>
     </section>
-<section class="logos">
-  <p class="micro muted">Trusted by teams building on Web3</p>
-  <div class="logo-row">
-   
-  </div>
-</section>
-<section class="section" id="early-access">
-  <h2 class="section-title">Get Early Access</h2>
-  <p class="section-subtitle">
-    Join the private beta. Tell us who you are, and what you want GateOra to protect.
-  </p>
 
-  <form
-    class="early-form"
-    action="https://formsubmit.co/renatnar@gmail.com"
-    method="POST"
-  >
-    <input type="text" name="_honey" style="display:none" />
-    <input type="hidden" name="_captcha" value="false" />
-    <input type="hidden" name="_subject" value="GateOra • Early Access Request" />
-    <input type="hidden" name="_template" value="table" />
-    <input type="hidden" name="_next" value="https://gateora.github.io/GateOra/thanks-early.html" />
-
-    <div class="early-grid">
-      <div>
-        <label class="early-label" for="ea_name">Name</label>
-        <input class="early-input" id="ea_name" name="name" type="text" placeholder="Your name" required />
+    <!-- TRUSTED BY -->
+    <section class="logos">
+      <p class="micro muted">Trusted by teams building on Web3</p>
+      <div class="logo-row">
+        <span>ProtocolX</span>
+        <span>WalletLab</span>
+        <span>ChainSecure</span>
+        <span>AuditWorks</span>
+        <span>NodeOps</span>
       </div>
+    </section>
 
-      <div>
-        <label class="early-label" for="ea_email">Email</label>
-        <input class="early-input" id="ea_email" name="email" type="email" placeholder="you@email.com" required />
+    <!-- FEATURES (BESTAAT NU ECHT) -->
+    <section class="section" id="features">
+      <h2 class="section-title">What GateOra protects</h2>
+      <p class="section-subtitle">A clean security layer for the Web3 user journey.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>🛰️ Threat Detection</h3>
+          <p>Real-time signals to spot phishing, malicious approvals, and abnormal activity before damage happens.</p>
+        </div>
+
+        <div class="card">
+          <h3>🛡️ Wallet Firewall</h3>
+          <p>Policy controls to block risky transactions and warn users in the exact moment that matters.</p>
+        </div>
+
+        <div class="card">
+          <h3>📡 Contract Monitoring</h3>
+          <p>Scan exposure, patterns, and common exploit vectors to reduce smart contract risk.</p>
+        </div>
       </div>
+    </section>
 
-      <div>
-        <label class="early-label" for="ea_role">Role</label>
-        <input class="early-input" id="ea_role" name="role" list="roleList" placeholder="Select…" required />
-<datalist id="roleList">
-  <option value="User"></option>
-  <option value="Builder"></option>
-</datalist>
+    <!-- EARLY ACCESS -->
+    <section class="section" id="early-access">
+      <h2 class="section-title">Get Early Access</h2>
+      <p class="section-subtitle">
+        Join the private beta. Tell us who you are, and what you want GateOra to protect.
+      </p>
 
-      </div>
+      <form
+        class="early-form"
+        action="https://formsubmit.co/renatnar@gmail.com"
+        method="POST"
+      >
+        <input type="text" name="_honey" style="display:none" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_subject" value="GateOra • Early Access Request" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_next" value="https://gateora.github.io/GateOra/thanks-early.html" />
 
-      <div>
-        <input class="early-input" id="ea_chain" name="primary_chain" list="chainList" placeholder="Select…" required />
-<datalist id="chainList">
-  <option value="Ethereum"></option>
-  <option value="Arbitrum"></option>
-  <option value="Optimism"></option>
-  <option value="Base"></option>
-  <option value="Polygon"></option>
-  <option value="Solana"></option>
-  <option value="Other"></option>
-</datalist>
+        <!-- Rij 1 -->
+        <div class="early-grid">
+          <div>
+            <label class="early-label" for="ea_name">Name</label>
+            <input class="early-input" id="ea_name" name="name" type="text" placeholder="Your name" required />
+          </div>
 
-      </div>
-    </div>
+          <div>
+            <label class="early-label" for="ea_email">Email</label>
+            <input class="early-input" id="ea_email" name="email" type="email" placeholder="you@email.com" required />
+          </div>
+        </div>
 
-    <input class="early-input" id="ea_need" name="top_need" list="needList" placeholder="Select…" required />
-<datalist id="needList">
-  <option value="Phishing / fake dApps"></option>
-  <option value="Unlimited approvals"></option>
-  <option value="Malicious signatures (drainers)"></option>
-  <option value="Unknown contracts"></option>
-  <option value="High-risk transactions"></option>
-  <option value="Other"></option>
-</datalist>
+        <!-- Rij 2 -->
+        <div class="early-grid">
+          <div>
+            <label class="early-label" for="ea_role">Role</label>
+            <input class="early-input" id="ea_role" name="role" list="roleList" placeholder="Select…" required />
+            <datalist id="roleList">
+              <option value="User"></option>
+              <option value="Builder"></option>
+            </datalist>
+          </div>
 
+          <div>
+            <label class="early-label" for="ea_chain">Primary chain</label>
+            <input class="early-input" id="ea_chain" name="primary_chain" list="chainList" placeholder="Select…" required />
+            <datalist id="chainList">
+              <option value="Ethereum"></option>
+              <option value="Arbitrum"></option>
+              <option value="Optimism"></option>
+              <option value="Base"></option>
+              <option value="Polygon"></option>
+              <option value="BSC"></option>
+              <option value="Avalanche"></option>
+              <option value="Solana"></option>
+              <option value="Other"></option>
+            </datalist>
+          </div>
+        </div>
 
-    <label class="early-label" for="ea_msg">Extra details (optional)</label>
-    <textarea class="early-textarea" id="ea_msg" name="message"
-      placeholder="Any context, links, wallet/dApp type, or requirements…"></textarea>
+        <!-- Rij 3 -->
+        <div class="early-grid">
+          <div>
+            <label class="early-label" for="ea_need">Top need</label>
+            <input class="early-input" id="ea_need" name="top_need" list="needList" placeholder="Select…" required />
+            <datalist id="needList">
+              <option value="Phishing / fake dApps"></option>
+              <option value="Unlimited approvals"></option>
+              <option value="Malicious signatures (drainers)"></option>
+              <option value="Unknown contracts"></option>
+              <option value="High-risk transactions"></option>
+              <option value="Other"></option>
+            </datalist>
+          </div>
 
-    <button type="submit" class="btn btn-primary">Request Early Access</button>
-    <p class="micro muted" style="margin: 10px 0 0;">We’ll reply if we can onboard you to the beta.</p>
-  </form>
-</section>
+          <div>
+            <label class="early-label" for="ea_project">Project / Company (optional)</label>
+            <input class="early-input" id="ea_project" name="project" type="text" placeholder="e.g. Wallet, dApp, Protocol…" />
+          </div>
+        </div>
 
-<form
-  class="feedback-form"
-  action="https://formsubmit.co/renatnar@gmail.com"
-  method="POST"
->
-  <!-- anti-spam (bots vullen dit vaak in) -->
-  <input type="text" name="_honey" style="display:none" />
+        <label class="early-label" for="ea_msg">Extra details (optional)</label>
+        <textarea
+          class="early-textarea"
+          id="ea_msg"
+          name="message"
+          placeholder="Any context, links, wallet/dApp type, or requirements…"
+        ></textarea>
 
-  <!-- optioneel: captcha uit -->
-  <input type="hidden" name="_captcha" value="false" />
+        <button type="submit" class="btn btn-primary">Request Early Access</button>
 
-  <!-- onderwerp in je inbox -->
-  <input type="hidden" name="_subject" value="New GateOra feedback" />
+        <p class="micro muted" style="margin: 10px 0 0;">
+          No spam. We’ll only use this to contact you about beta access.
+        </p>
+      </form>
+    </section>
 
-  <!-- waarheen na versturen (je kunt dit weglaten als je wilt) -->
-  <input type="hidden" name="_next" value="https://gateora.github.io/GateOra/thanks.html" />
+    <!-- FEEDBACK -->
+    <section class="section" id="feedback">
+      <h2 class="section-title">Feedback</h2>
+      <p class="section-subtitle">Help shape the product—tell us what you need most.</p>
 
-  <textarea name="feedback" placeholder="Kindly provide your feedback" required></textarea>
+      <form
+        class="feedback-form"
+        action="https://formsubmit.co/renatnar@gmail.com"
+        method="POST"
+      >
+        <input type="text" name="_honey" style="display:none" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_subject" value="GateOra • Website Feedback" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_next" value="https://gateora.github.io/GateOra/thanks.html" />
 
-  <button type="submit" class="btn btn-primary">Verstuur</button>
-  <p class="micro muted">Your message will be emailed to us.</p>
-</form>
+        <textarea name="feedback" placeholder="Kindly provide your feedback" required></textarea>
 
-</script>
-
+        <button type="submit" class="btn btn-primary">Verstuur</button>
+        <p class="micro muted">Your message will be emailed to us.</p>
+      </form>
+    </section>
 
     <footer class="footer">
       <span class="muted">© <span id="year"></span> GateOra. All rights reserved.</span>
@@ -201,7 +252,6 @@
     resizeMatrix();
 
     function draw() {
-      // trail fade (lager = langere trails)
       ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
       ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
@@ -226,11 +276,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
