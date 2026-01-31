@@ -95,11 +95,12 @@
 
       <div>
         <label class="early-label" for="ea_role">Role</label>
-        <select class="early-input" id="ea_role" name="role" required>
-          <option value="" selected disabled>Select…</option>
-          <option value="User">User</option>
-          <option value="Builder">Builder</option>
-        </select>
+        <input class="early-input" id="ea_role" name="role" list="roleList" placeholder="Select…" required />
+<datalist id="roleList">
+  <option value="User"></option>
+  <option value="Builder"></option>
+</datalist>
+
       </div>
 
       <div>
@@ -225,6 +226,7 @@
   </script>
 </body>
 </html>
+
 
 
 
