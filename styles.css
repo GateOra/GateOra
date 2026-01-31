@@ -387,4 +387,89 @@ body::before{
 @media (max-width: 920px){
   .early-grid{ grid-template-columns: 1fr; }
 }
+/* =========================
+   EARLY ACCESS — HARD FIX
+   (forces consistent styling)
+   ========================= */
+
+#early-access .early-form{
+  width: min(900px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+#early-access .early-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+#early-access .early-label{
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+  margin: 10px 0 6px;
+  text-align: left;
+}
+
+#early-access .early-input,
+#early-access select.early-input,
+#early-access input.early-input{
+  width: 100% !important;
+  min-width: 0 !important;
+
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  background: rgba(255,255,255,0.06) !important;
+
+  color: rgba(255,255,255,0.92) !important;
+  padding: 12px 14px !important;
+
+  outline: none !important;
+  appearance: none;               /* maakt select strakker */
+  -webkit-appearance: none;
+}
+
+#early-access .early-input:focus{
+  border-color: rgba(45,227,255,0.40) !important;
+  box-shadow: 0 0 0 3px rgba(45,227,255,0.12);
+}
+
+#early-access .early-textarea{
+  width: 100% !important;
+  min-height: 120px !important;
+
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  background: rgba(255,255,255,0.06) !important;
+
+  color: rgba(255,255,255,0.92) !important;
+  padding: 14px !important;
+
+  outline: none !important;
+  resize: vertical;
+}
+
+#early-access .early-textarea::placeholder,
+#early-access .early-input::placeholder{
+  color: rgba(255,255,255,0.45);
+}
+
+/* Zorg dat de button niet “zweeft” of rare breedte krijgt */
+#early-access .btn{
+  justify-self: start;           /* links in desktop */
+}
+
+/* Mobile: alles 1 kolom */
+@media (max-width: 920px){
+  #early-access .early-grid{
+    grid-template-columns: 1fr;
+  }
+
+  #early-access .btn{
+    justify-self: stretch;        /* full-width button op mobiel */
+  }
+}
+
 
