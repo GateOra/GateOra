@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GateOra • Live Demo</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <canvas id="matrix"></canvas>
+
+  <main class="container">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">GateOra</span>
+      </div>
+
+      <nav class="nav">
+        <a href="./index.html">Home</a>
+        <a href="#log">Event Log</a>
+      </nav>
+
+      <a class="btn btn-primary" href="./index.html#feedback">Get Early Access</a>
+    </header>
+
+    <section class="section demo-hero">
+      <div class="demo-head">
+        <div>
+          <h2 class="section-title" style="margin-bottom:6px;">Live Demo • Transaction Firewall Simulator</h2>
+          <p class="section-subtitle" style="margin:0;">
+            Simulate Web3 transactions and see GateOra verdicts: <b>Allow</b>, <b>Warn</b>, or <b>Block</b>.
+          </p>
+        </div>
+
+        <div class="demo-actions">
+          <button class="btn btn-ghost" id="btnRandom">Random Scenario</button>
+          <button class="btn btn-primary" id="btnAnalyze">Analyze</button>
+        </div>
+      </div>
+
+      <div class="demo-grid">
+        <!-- LEFT: Analyzer -->
+        <div class="demo-panel">
+          <div class="demo-panel-title">Transaction Input</div>
+
+          <label class="demo-label" for="scenario">Scenario</label>
+          <select class="demo-select" id="scenario"></select>
+
+          <label class="demo-label" for="txInput">Transaction (JSON)</label>
+          <textarea class="demo-textarea" id="txInput" spellcheck="false"></textarea>
+
+          <div class="demo-split">
+            <div class="demo-panel-sub">
+              <div class="demo-panel-title small">Policies</div>
+
+              <label class="demo-toggle">
+                <input type="checkbox" id="polBlockUnlimited" checked />
+                <span>Block unlimited approvals</span>
+              </label>
+
+              <label class="demo-toggle">
+                <input type="checkbox" id="polBlockUnknown" />
+                <span>Block unknown contracts</span>
+              </label>
+
+              <label class="demo-toggle">
+                <input type="checkbox" id="polStrictMode" />
+                <span>Strict mode (lower thresholds)</span>
+              </label>
+
+              <label class="demo-toggle">
+                <input type="checkbox" id="polExplainMore" checked />
+                <span>Show detailed reasons</span>
+              </label>
+            </div>
+
+            <div class="demo-panel-sub">
+              <div class="demo-panel-title small">Quick Actions</div>
+
+              <button class="btn btn-ghost demo-btn-full" id="btnReset">Reset</button>
+              <button class="btn btn-ghost demo-btn-full" id="btnCopy">Copy Report</button>
+              <button class="btn btn-ghost demo-btn-full" id="btnSimulate">Run Attack Simulation</button>
+            </div>
+          </div>
+
+          <p class="micro muted" style="margin-top:12px;">
+            This is a demo simulator. No on-chain calls are executed.
+          </p>
+        </div>
+
+        <!-- RIGHT: Results -->
+        <div class="demo-panel">
+          <div class="demo-panel-title">Firewall Verdict</div>
+
+          <div class="demo-result">
+            <div class="demo-gauge-wrap">
+              <div class="demo-gauge" id="gauge" style="--score: 0;">
+                <div class="demo-gauge-inner">
+                  <div class="demo-score" id="score">0</div>
+                  <div class="demo-score-label">Risk Score</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-verdict">
+              <div class="demo-badge allow" id="badge">ALLOW</div>
+              <div class="demo-mini muted" id="verdictNote">Low risk behavior detected.</div>
+
+              <div class="demo-reasons" id="reasons"></div>
+
+              <div class="demo-cta-row">
+                <button class="btn btn-primary" id="btnAllowOnce">Allow once</button>
+                <button class="btn btn-ghost" id="btnBlock">Block</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-divider"></div>
+
+          <div class="demo-panel-title small">Human-Readable Summary</div>
+          <div class="demo-summary" id="summary">
+            Select a scenario and click Analyze.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="log">
+      <h2 class="section-title">Event Log</h2>
+      <p class="section-subtitle">Every analysis is logged as a security event.</p>
+
+      <div class="demo-table-wrap">
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Scenario</th>
+              <th>Verdict</th>
+              <th>Score</th>
+              <th>Top Signal</th>
+            </tr>
+          </thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span class="muted">© <span id="year"></span> GateOra. Live Demo Simulator.</span>
+    </footer>
+  </main>
+
+  <script>
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ----- MATRIX BACKGROUND -----
+    const matrixCanvas = document.getElementById("matrix");
+    const mtx = matrixCanvas.getContext("2d");
+
+    const matrixChars = "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const fontSize = 16;
+    let drops = [];
+    let cols = 0;
+
+    function resizeMatrix() {
+      const dpr = window.devicePixelRatio || 1;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      matrixCanvas.width = Math.floor(w * dpr);
+      matrixCanvas.height = Math.floor(h * dpr);
+      matrixCanvas.style.width = w + "px";
+      matrixCanvas.style.height = h + "px";
+      mtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cols = Math.floor(w / fontSize);
+      drops = new Array(cols).fill(1);
+    }
+
+    window.addEventListener("resize", resizeMatrix);
+    resizeMatrix();
+
+    function drawMatrix() {
+      mtx.fillStyle = "rgba(0, 0, 0, 0.08)";
+      mtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+      mtx.font = `${fontSize}px monospace`;
+      mtx.fillStyle = "rgba(0, 255, 120, 0.70)";
+
+      for (let i = 0; i < drops.length; i++) {
+        const ch = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        mtx.fillText(ch, x, y);
+
+        if (y > window.innerHeight && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+      requestAnimationFrame(drawMatrix);
+    }
+    drawMatrix();
+
+    // ----- DEMO ENGINE -----
+    const scenarios = [
+      {
+        id: "safe_swap",
+        name: "Safe Swap (known router)",
+        tx: {
+          chain: "ethereum",
+          type: "swap",
+          to: "0xRouterKnown",
+          contractReputation: "trusted",
+          valueUSD: 120,
+          token: "USDC",
+          slippage: 0.5
+        }
+      },
+      {
+        id: "unlimited_approval_unknown",
+        name: "Unlimited Approval (unknown spender)",
+        tx: {
+          chain: "ethereum",
+          type: "approve",
+          token: "USDT",
+          spender: "0xSpenderUnknown",
+          spenderVerified: false,
+          allowance: "MAX_UINT",
+          contractReputation: "unknown",
+          valueUSD: 0
+        }
+      },
+      {
+        id: "permit_phishing",
+        name: "Phishing Signature (drainer pattern)",
+        tx: {
+          chain: "ethereum",
+          type: "sign",
+          messageType: "permit",
+          domain: "uniswap-airdrop-claim.io",
+          domainLookalike: true,
+          knownDrainerPattern: true
+        }
+      },
+      {
+        id: "new_contract_high_value",
+        name: "New Contract + High Value Transfer",
+        tx: {
+          chain: "arbitrum",
+          type: "transfer",
+          to: "0xNewContract",
+          contractAgeDays: 1,
+          contractReputation: "unknown",
+          valueUSD: 15000,
+          token: "ETH"
+        }
+      },
+      {
+        id: "upgradeable_admin",
+        name: "Upgradeable Contract With Admin Privileges",
+        tx: {
+          chain: "ethereum",
+          type: "interact",
+          to: "0xUpgradeable",
+          contractReputation: "unknown",
+          upgradeable: true,
+          adminCanPause: true,
+          adminCanWithdraw: true,
+          valueUSD: 600
+        }
+      },
+      {
+        id: "safe_approve_limited",
+        name: "Limited Approval (verified spender)",
+        tx: {
+          chain: "ethereum",
+          type: "approve",
+          token: "USDC",
+          spender: "0xSpenderVerified",
+          spenderVerified: true,
+          allowance: "500",
+          contractReputation: "trusted",
+          valueUSD: 0
+        }
+      }
+    ];
+
+    const elScenario = document.getElementById("scenario");
+    const elInput = document.getElementById("txInput");
+
+    const elScore = document.getElementById("score");
+    const elGauge = document.getElementById("gauge");
+    const elBadge = document.getElementById("badge");
+    const elVerdictNote = document.getElementById("verdictNote");
+    const elReasons = document.getElementById("reasons");
+    const elSummary = document.getElementById("summary");
+
+    const polBlockUnlimited = document.getElementById("polBlockUnlimited");
+    const polBlockUnknown = document.getElementById("polBlockUnknown");
+    const polStrictMode = document.getElementById("polStrictMode");
+    const polExplainMore = document.getElementById("polExplainMore");
+
+    const logBody = document.getElementById("logBody");
+
+    function prettyJSON(obj) {
+      return JSON.stringify(obj, null, 2);
+    }
+
+    function nowTime() {
+      const d = new Date();
+      return d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
+    }
+
+    function setBadge(verdict) {
+      elBadge.classList.remove("allow","warn","block");
+      if (verdict === "ALLOW") elBadge.classList.add("allow");
+      if (verdict === "WARN") elBadge.classList.add("warn");
+      if (verdict === "BLOCK") elBadge.classList.add("block");
+      elBadge.textContent = verdict;
+    }
+
+    function addReason(list, title, detail) {
+      list.push({ title, detail });
+    }
+
+    function evaluate(tx, policies) {
+      let score = 0;
+      const reasons = [];
+      let topSignal = "No critical signals";
+
+      // Heuristics
+      if (tx.type === "approve") {
+        if (tx.allowance === "MAX_UINT") {
+          score += 45;
+          addReason(reasons, "Unlimited approval", "Allowance is MAX_UINT (unlimited spend).");
+          topSignal = "Unlimited approval";
+          if (policies.blockUnlimitedApprovals) {
+            score = Math.max(score, 85); // force high severity
+            addReason(reasons, "Policy triggered", "Policy blocks unlimited approvals.");
+          }
+        } else {
+          score += 5;
+          addReason(reasons, "Limited approval", "Approval amount is limited.");
+        }
+
+        if (tx.spenderVerified === false) {
+          score += 25;
+          addReason(reasons, "Unverified spender", "Spender address is not verified.");
+          topSignal = topSignal === "Unlimited approval" ? topSignal : "Unverified spender";
+        }
+      }
+
+      if (tx.contractReputation === "unknown") {
+        score += 15;
+        addReason(reasons, "Unknown contract reputation", "Target has no trusted reputation signals.");
+        if (policies.blockUnknownContracts) {
+          score = Math.max(score, 80);
+          addReason(reasons, "Policy triggered", "Policy blocks unknown contracts.");
+          topSignal = "Unknown contract blocked";
+        }
+      }
+
+      if (typeof tx.contractAgeDays === "number" && tx.contractAgeDays < 7) {
+        score += 10;
+        addReason(reasons, "Very new contract", `Contract age is ${tx.contractAgeDays} day(s).`);
+        topSignal = topSignal.includes("Unlimited") ? topSignal : "Very new contract";
+      }
+
+      if (typeof tx.valueUSD === "number" && tx.valueUSD >= 5000) {
+        score += 15;
+        addReason(reasons, "High value", `Estimated value: ~$${tx.valueUSD.toLocaleString()}.`);
+        topSignal = "High value transfer";
+      }
+
+      if (tx.type === "sign") {
+        score += 20;
+        addReason(reasons, "Signature request", "User is asked to sign an off-chain message.");
+        topSignal = "Signature request";
+
+        if (tx.domainLookalike) {
+          score += 20;
+          addReason(reasons, "Lookalike domain", "Domain appears to mimic a known brand.");
+          topSignal = "Lookalike domain";
+        }
+
+        if (tx.knownDrainerPattern) {
+          score += 55;
+          addReason(reasons, "Known drainer pattern", "Message matches a known draining signature pattern.");
+          topSignal = "Known drainer pattern";
+        }
+      }
+
+      if (tx.upgradeable) {
+        score += 12;
+        addReason(reasons, "Upgradeable contract", "Upgradeable contracts increase governance/admin risk.");
+        topSignal = "Upgradeable risk";
+      }
+      if (tx.adminCanWithdraw) {
+        score += 18;
+        addReason(reasons, "Admin withdraw privileges", "Admin can withdraw funds or move assets.");
+        topSignal = "Admin withdraw privileges";
+      }
+      if (tx.adminCanPause) {
+        score += 10;
+        addReason(reasons, "Admin pause privileges", "Admin can pause protocol activity.");
+      }
+
+      // Strict mode lowers thresholds & nudges score
+      if (policies.strictMode) {
+        score += 8;
+        addReason(reasons, "Strict mode", "Stricter thresholds applied.");
+      }
+
+      score = Math.max(0, Math.min(100, score));
+
+      // Verdict thresholds
+      const warnAt = policies.strictMode ? 40 : 50;
+      const blockAt = policies.strictMode ? 70 : 80;
+
+      let verdict = "ALLOW";
+      if (score >= blockAt) verdict = "BLOCK";
+      else if (score >= warnAt) verdict = "WARN";
+
+      // Summary (human readable)
+      const summary = buildSummary(tx, verdict, score);
+
+      return { score, verdict, reasons, topSignal, summary };
+    }
+
+    function buildSummary(tx, verdict, score) {
+      const parts = [];
+      parts.push(`Verdict: ${verdict} (Risk ${score}/100).`);
+
+      if (tx.type === "approve") {
+        parts.push(`Transaction requests an approval for ${tx.token || "a token"}.`);
+        if (tx.allowance === "MAX_UINT") parts.push("Approval is unlimited (MAX).");
+        else parts.push(`Approval amount: ${tx.allowance}.`);
+        if (tx.spender) parts.push(`Spender: ${tx.spender}.`);
+        if (tx.spenderVerified === false) parts.push("Spender is not verified.");
+      } else if (tx.type === "swap") {
+        parts.push(`Swap via ${tx.to || "router"} with ${tx.slippage}% slippage.`);
+      } else if (tx.type === "transfer") {
+        parts.push(`Transfer of ${tx.token || "asset"} to ${tx.to || "recipient"} worth ~$${(tx.valueUSD||0).toLocaleString()}.`);
+      } else if (tx.type === "sign") {
+        parts.push(`Signature request (${tx.messageType || "message"}) from domain ${tx.domain || "unknown"}.`);
+      } else {
+        parts.push(`Interaction with ${tx.to || "contract"} on ${tx.chain || "chain"}.`);
+      }
+
+      return parts.join(" ");
+    }
+
+    function render(result) {
+      elScore.textContent = String(result.score);
+      elGauge.style.setProperty("--score", result.score);
+
+      setBadge(result.verdict);
+
+      if (result.verdict === "ALLOW") elVerdictNote.textContent = "Looks safe based on current signals.";
+      if (result.verdict === "WARN") elVerdictNote.textContent = "Potential risk detected. Review signals before proceeding.";
+      if (result.verdict === "BLOCK") elVerdictNote.textContent = "High risk detected. Transaction should be blocked.";
+
+      // reasons
+      elReasons.innerHTML = "";
+      if (polExplainMore.checked) {
+        const ul = document.createElement("ul");
+        ul.className = "demo-reason-list";
+        result.reasons.slice(0, 8).forEach(r => {
+          const li = document.createElement("li");
+          li.innerHTML = `<b>${escapeHTML(r.title)}:</b> <span class="muted">${escapeHTML(r.detail)}</span>`;
+          ul.appendChild(li);
+        });
+        elReasons.appendChild(ul);
+      }
+
+      elSummary.textContent = result.summary;
+    }
+
+    function escapeHTML(s) {
+      return String(s).replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+      }[c]));
+    }
+
+    function addLogRow(scenarioName, verdict, score, topSignal) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${nowTime()}</td>
+        <td>${escapeHTML(scenarioName)}</td>
+        <td><span class="demo-pill ${verdict.toLowerCase()}">${verdict}</span></td>
+        <td>${score}</td>
+        <td class="muted">${escapeHTML(topSignal)}</td>
+      `;
+      logBody.prepend(tr);
+
+      // Keep last 10
+      while (logBody.children.length > 10) logBody.removeChild(logBody.lastChild);
+    }
+
+    function loadScenarioById(id) {
+      const sc = scenarios.find(s => s.id === id) || scenarios[0];
+      elScenario.value = sc.id;
+      elInput.value = prettyJSON(sc.tx);
+      return sc;
+    }
+
+    function getPolicies() {
+      return {
+        blockUnlimitedApprovals: polBlockUnlimited.checked,
+        blockUnknownContracts: polBlockUnknown.checked,
+        strictMode: polStrictMode.checked,
+        explainMore: polExplainMore.checked
+      };
+    }
+
+    function analyzeCurrent() {
+      let tx;
+      try {
+        tx = JSON.parse(elInput.value);
+      } catch (e) {
+        alert("Invalid JSON. Please use valid JSON format.");
+        return;
+      }
+      const policies = getPolicies();
+      const sc = scenarios.find(s => s.id === elScenario.value) || { name: "Custom" };
+      const result = evaluate(tx, policies);
+      render(result);
+      addLogRow(sc.name, result.verdict, result.score, result.topSignal);
+      return { sc, result, tx };
+    }
+
+    // Init dropdown
+    scenarios.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.id;
+      opt.textContent = s.name;
+      elScenario.appendChild(opt);
+    });
+
+    // Default scenario
+    loadScenarioById(scenarios[0].id);
+    render({ score:0, verdict:"ALLOW", reasons:[], topSignal:"", summary:"Select a scenario and click Analyze." });
+
+    // Handlers
+    document.getElementById("btnAnalyze").addEventListener("click", analyzeCurrent);
+
+    elScenario.addEventListener("change", () => {
+      loadScenarioById(elScenario.value);
+    });
+
+    document.getElementById("btnRandom").addEventListener("click", () => {
+      const pick = scenarios[Math.floor(Math.random() * scenarios.length)];
+      loadScenarioById(pick.id);
+      analyzeCurrent();
+    });
+
+    document.getElementById("btnReset").addEventListener("click", () => {
+      loadScenarioById(scenarios[0].id);
+      render({ score:0, verdict:"ALLOW", reasons:[], topSignal:"", summary:"Select a scenario and click Analyze." });
+    });
+
+    document.getElementById("btnCopy").addEventListener("click", async () => {
+      const out = analyzeCurrent();
+      if (!out) return;
+
+      const report = [
+        "GateOra Live Demo Report",
+        `Scenario: ${out.sc.name}`,
+        `Verdict: ${out.result.verdict}`,
+        `Risk Score: ${out.result.score}/100`,
+        "",
+        "Top signals:",
+        ...out.result.reasons.slice(0, 8).map(r => `- ${r.title}: ${r.detail}`),
+        "",
+        "Transaction JSON:",
+        JSON.stringify(out.tx, null, 2)
+      ].join("\n");
+
+      try {
+        await navigator.clipboard.writeText(report);
+        alert("Report copied to clipboard.");
+      } catch {
+        alert("Copy failed (browser permissions).");
+      }
+    });
+
+    document.getElementById("btnSimulate").addEventListener("click", async () => {
+      // Run 3 quick scenario analyses
+      const picks = [scenarios[2], scenarios[1], scenarios[3]]; // phishing -> approval -> high value
+      for (const sc of picks) {
+        loadScenarioById(sc.id);
+        analyzeCurrent();
+        await new Promise(r => setTimeout(r, 550));
+      }
+    });
+
+    // Optional buttons (mock actions)
+    document.getElementById("btnAllowOnce").addEventListener("click", () => alert("ALLOW ONCE (demo action)."));
+    document.getElementById("btnBlock").addEventListener("click", () => alert("BLOCK (demo action)."));
+  </script>
+</body>
+</html>
