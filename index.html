@@ -87,70 +87,29 @@
       </div>
     </section>
 
-    <form class="feedback-form" id="feedbackForm">
-  <textarea name="feedback" id="feedback" placeholder="Kindly provide your feedback"></textarea>
-  <button type="submit" class="btn btn-primary" id="sendBtn">Verstuur</button>
-  <p class="micro muted" id="status"></p>
+<form
+  class="feedback-form"
+  action="https://formsubmit.co/renatnar@gmail.com"
+  method="POST"
+>
+  <!-- anti-spam (bots vullen dit vaak in) -->
+  <input type="text" name="_honey" style="display:none" />
+
+  <!-- optioneel: captcha uit -->
+  <input type="hidden" name="_captcha" value="false" />
+
+  <!-- onderwerp in je inbox -->
+  <input type="hidden" name="_subject" value="New GateOra feedback" />
+
+  <!-- waarheen na versturen (je kunt dit weglaten als je wilt) -->
+  <input type="hidden" name="_next" value="https://gateora.github.io/GateOra/thanks.html" />
+
+  <textarea name="feedback" placeholder="Kindly provide your feedback" required></textarea>
+
+  <button type="submit" class="btn btn-primary">Verstuur</button>
+  <p class="micro muted">Your message will be emailed to us.</p>
 </form>
 
-<script>
-  const form = document.getElementById("feedbackForm");
-  const statusEl = document.getElementById("status");
-  const btn = document.getElementById("sendBtn");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const feedback = document.getElementById("feedback").value.trim();
-    if (!feedback) {
-      statusEl.textContent = "Write your feedback first.";
-      return;
-    }
-
-    btn.disabled = true;
-    statusEl.textContent = "Sending...";
-
-    try {
-      const res = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ feedback })
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-
-      statusEl.textContent = "Sent. Thank you!";
-      form.reset();
-    } try {
-  const res = await fetch("/api/feedback", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ feedback })
-  });
-
-  const raw = await res.text();       // altijd veilig
-  console.log("STATUS:", res.status);
-  console.log("RESPONSE:", raw);
-
-  let data = {};
-  try { data = JSON.parse(raw); } catch {}
-
-  if (!res.ok) throw new Error(data.error || raw || "Request failed");
-
-  statusEl.textContent = "Sent. Thank you!";
-  form.reset();
-} catch (err) {
-  console.error(err);
-  statusEl.textContent = "Could not send: " + err.message;
-}
- (err) {
-      statusEl.textContent = "Could not send. Please try again later.";
-      console.error(err);
-    } finally {
-      btn.disabled = false;
-    }
-  });
 </script>
 
 
@@ -216,3 +175,4 @@
   </script>
 </body>
 </html>
+
