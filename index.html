@@ -118,16 +118,16 @@
       </div>
     </div>
 
-    <label class="early-label" for="ea_need">Top need</label>
-    <select class="early-input" id="ea_need" name="top_need" required>
-      <option value="" selected disabled>Select…</option>
-      <option>Phishing / fake dApps</option>
-      <option>Unlimited approvals</option>
-      <option>Malicious signatures (drainers)</option>
-      <option>Unknown contracts</option>
-      <option>High-risk transactions</option>
-      <option>Other</option>
-    </select>
+    <input class="early-input" id="ea_need" name="top_need" list="needList" placeholder="Select…" required />
+<datalist id="needList">
+  <option value="Phishing / fake dApps"></option>
+  <option value="Unlimited approvals"></option>
+  <option value="Malicious signatures (drainers)"></option>
+  <option value="Unknown contracts"></option>
+  <option value="High-risk transactions"></option>
+  <option value="Other"></option>
+</datalist>
+
 
     <label class="early-label" for="ea_msg">Extra details (optional)</label>
     <textarea class="early-textarea" id="ea_msg" name="message"
@@ -226,6 +226,7 @@
   </script>
 </body>
 </html>
+
 
 
 
