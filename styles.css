@@ -337,3 +337,54 @@ body::before{
     radial-gradient(circle at 50% 30%, rgba(0,0,0,0.15), rgba(0,0,0,0.85) 70%),
     linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.75));
 }
+/* Early Access form */
+.early-form{
+  width: min(820px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 10px;
+}
+
+.early-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.early-label{
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.70);
+  margin: 10px 0 6px;
+}
+
+.early-input{
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  padding: 12px 14px;
+  outline: none;
+}
+
+.early-input:focus{
+  border-color: rgba(45,227,255,0.35);
+}
+
+.early-textarea{
+  width: 100%;
+  min-height: 110px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  padding: 14px;
+  outline: none;
+  resize: vertical;
+}
+
+@media (max-width: 920px){
+  .early-grid{ grid-template-columns: 1fr; }
+}
+
