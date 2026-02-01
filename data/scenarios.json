@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "safe_swap",
+      "name": "Safe Swap (known router)",
+      "tx": {
+        "chain": "ethereum",
+        "type": "swap",
+        "to": "0xRouterKnown",
+        "contractReputation": "trusted",
+        "valueUSD": 120,
+        "token": "USDC",
+        "slippage": 0.5
+      }
+    },
+    {
+      "id": "limited_approve_verified",
+      "name": "Limited Approval (verified spender)",
+      "tx": {
+        "chain": "ethereum",
+        "type": "approve",
+        "token": "USDC",
+        "spender": "0xSpenderVerified",
+        "spenderVerified": true,
+        "allowance": "500",
+        "contractReputation": "trusted",
+        "valueUSD": 0
+      }
+    },
+    {
+      "id": "unlimited_approval_unknown",
+      "name": "Unlimited Approval (unknown spender)",
+      "tx": {
+        "chain": "ethereum",
+        "type": "approve",
+        "token": "USDT",
+        "spender": "0xSpenderUnknown",
+        "spenderVerified": false,
+        "allowance": "MAX_UINT",
+        "contractReputation": "unknown",
+        "valueUSD": 0
+      }
+    },
+    {
+      "id": "phishing_signature_drainer",
+      "name": "Phishing Signature (known drainer pattern)",
+      "tx": {
+        "chain": "ethereum",
+        "type": "sign",
+        "messageType": "permit",
+        "domain": "uniswap-airdrop-claim.io",
+        "domainLookalike": true,
+        "knownDrainerPattern": true
+      }
+    },
+    {
+      "id": "new_contract_high_value",
+      "name": "New Contract + High Value Transfer",
+      "tx": {
+        "chain": "arbitrum",
+        "type": "transfer",
+        "to": "0xNewContract",
+        "contractAgeDays": 1,
+        "contractReputation": "unknown",
+        "valueUSD": 15000,
+        "token": "ETH"
+      }
+    },
+    {
+      "id": "unknown_contract_medium_value",
+      "name": "Unknown Contract Interaction (medium value)",
+      "tx": {
+        "chain": "base",
+        "type": "interact",
+        "to": "0xUnknownContract",
+        "contractReputation": "unknown",
+        "valueUSD": 800,
+        "method": "deposit()"
+      }
+    },
+    {
+      "id": "upgradeable_admin_withdraw",
+      "name": "Upgradeable Contract With Admin Withdraw",
+      "tx": {
+        "chain": "ethereum",
+        "type": "interact",
+        "to": "0xUpgradeable",
+        "contractReputation": "unknown",
+        "upgradeable": true,
+        "adminCanPause": true,
+        "adminCanWithdraw": true,
+        "valueUSD": 600
+      }
+    },
+    {
+      "id": "weird_gas_anomaly",
+      "name": "Gas / Fee Anomaly",
+      "tx": {
+        "chain": "ethereum",
+        "type": "transfer",
+        "to": "0xRecipient",
+        "contractReputation": "trusted",
+        "valueUSD": 400,
+        "token": "ETH",
+        "gasAnomaly": true
+      }
+    },
+    {
+      "id": "unverified_domain_no_drainer",
+      "name": "Lookalike Domain (no drainer match)",
+      "tx": {
+        "chain": "ethereum",
+        "type": "sign",
+        "messageType": "login",
+        "domain": "opensea-login-secure.com",
+        "domainLookalike": true,
+        "knownDrainerPattern": false
+      }
+    },
+    {
+      "id": "safe_transfer_small",
+      "name": "Safe Transfer (small value)",
+      "tx": {
+        "chain": "polygon",
+        "type": "transfer",
+        "to": "0xRecipientKnown",
+        "contractReputation": "trusted",
+        "valueUSD": 25,
+        "token": "USDC"
+      }
+    }
+  ]
+}
