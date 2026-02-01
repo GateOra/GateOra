@@ -391,6 +391,10 @@ function applyPack(pack) {
   loadScenarioById(scenarios[0].id);
   elSummary.textContent = "Select a scenario and click Analyze.";
 }
+elPack.addEventListener("change", () => {
+  applyPack(elPack.value);
+  analyze();
+});
 
 main().catch((e) => {
   console.error(e);
