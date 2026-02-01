@@ -528,5 +528,29 @@ audio{ width: min(520px, 100%); }
 @media (prefers-reduced-motion: reduce){
   .logo-track{ animation: none; }
 }
+.demo-explain{
+  margin-top: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  padding: 12px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.6;
+}
+
+.demo-explain h4{
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.80);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.demo-explain p{
+  margin: 0 0 10px;
+  color: rgba(255,255,255,0.78);
+}
+.demo-explain p:last-child{ margin-bottom: 0; }
+
 
 
