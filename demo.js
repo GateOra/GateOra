@@ -231,6 +231,28 @@ async function main() {
   // initial log
   let entries = loadLog();
   renderLog(logBody, entries);
+const elPack = document.getElementById("policyPack");
+
+function applyPack(pack) {
+  if (pack === "basic") {
+    polBlockUnlimited.checked = true;
+    polBlockUnknown.checked = false;
+    polStrictMode.checked = false;
+    polExplainMore.checked = true;
+  }
+  if (pack === "strict") {
+    polBlockUnlimited.checked = true;
+    polBlockUnknown.checked = true;
+    polStrictMode.checked = true;
+    polExplainMore.checked = true;
+  }
+  if (pack === "degen") {
+    polBlockUnlimited.checked = false;
+    polBlockUnknown.checked = false;
+    polStrictMode.checked = false;
+    polExplainMore.checked = false;
+  }
+}
 
   function getPolicies() {
     return {
