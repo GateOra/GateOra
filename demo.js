@@ -166,6 +166,22 @@ function buildSummary(tx, verdict, score) {
 
   return parts.join(" ");
 }
+function buildWhatHappens(tx){
+  if (tx.type === "approve") {
+    const amt = tx.allowance === "MAX_UINT" ? "unlimited" : tx.allowance;
+    return `You are approving ${amt} spending for ${tx.token || "a token"} by ${tx.spender || "a spender"}.`;
+  }
+  if (tx.type === "sign") {
+    return `You are being asked to sign a ${tx.messageType || "message"} from ${tx.domain || "an unknown domain"}.`;
+  }
+  if (tx.type === "transfer") {
+    return `You are transferring ${tx.token || "an asset"} worth ~$${(tx.valueUSD||0).toLocaleString()} to ${tx.to || "a recipient"}.`;
+  }
+  if (tx.type === "swap") {
+    return `You are swapping via ${tx.to || "a router"} with slippage ${tx.slippage}% for ${tx.token || "a token"}.`;
+  }
+  return `You are interacting with ${tx.to || "a contract"} on ${tx.chain || "a chain"}.`;
+}
 
 // --- localStorage event log ---
 const LOG_KEY = "gateora_demo_log_v1";
@@ -285,6 +301,23 @@ function applyPack(pack) {
     }
 
     elSummary.textContent = result.summary;
+    const what = buildWhatHappens(JSON.parse(elInput.value));
+const why = result.reasons.slice(0, 3).map(r => `• ${r.title}`).join("<br>");
+const rec = (result.verdict === "ALLOW")
+  ? "Recommended: Allow. Keep standard caution."
+  : (result.verdict === "WARN")
+    ? "Recommended: Verify spender/domain. Consider reducing approvals or using strict mode."
+    : "Recommended: Block. Do not sign/approve until verified.";
+
+elExplainBox.innerHTML = `
+  <h4>What’s happening</h4>
+  <p>${escapeHTML(what)}</p>
+  <h4>Why it’s risky</h4>
+  <p>${why || "• No major signals detected"}</p>
+  <h4>Recommended action</h4>
+  <p>${escapeHTML(rec)}</p>
+`;
+
   }
 
   function loadScenarioById(id) {
@@ -395,6 +428,7 @@ elPack.addEventListener("change", () => {
   applyPack(elPack.value);
   analyze();
 });
+const elExplainBox = document.getElementById("explainBox");
 
 main().catch((e) => {
   console.error(e);
