@@ -383,6 +383,35 @@ elExplainBox.innerHTML = `
   $("btnCopy").addEventListener("click", async () => {
     const out = analyze();
     if (!out) return;
+    document.getElementById("btnDownload").addEventListener("click", () => {
+  const out = analyze();
+  if (!out) return;
+
+  const report = [
+    "GateOra Live Demo Report",
+    `Time: ${new Date().toISOString()}`,
+    `Scenario: ${out.sc.name}`,
+    `Verdict: ${out.result.verdict}`,
+    `Risk Score: ${out.result.score}/100`,
+    "",
+    "Top signals:",
+    ...out.result.reasons.slice(0, 8).map(r => `- ${r.title}: ${r.detail}`),
+    "",
+    "Transaction JSON:",
+    JSON.stringify(out.tx, null, 2)
+  ].join("\n");
+
+  const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "gateora-demo-report.txt";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
 
     const report = [
       "GateOra Live Demo Report",
